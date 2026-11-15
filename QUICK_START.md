@@ -1,5 +1,156 @@
 # Quick Start Guide 🚀
 
+## Use with Claude Code, Codex, and Copilot
+
+Install the skill first, then invoke it **inside your coding agent**, not as
+a shell command. The examples below install the current source checkout;
+run the `make` commands from this repository's root. Source installations
+require POSIX sh and Go 1.27.3+ (or automatic toolchain download).
+
+For prebuilt releases that do not require Go, see
+[release installation](README.md#install-as-an-agent-skill-for-users).
+Ensure an installed release includes the CLI options used below; reinstall
+after updating the skill. Start a new agent session if it is not discovered.
+
+Open the Go project you want to analyze in your agent. Replace the sample
+`internal/orders` paths below with paths relative to that project's module
+root. Analyze separate Go modules individually.
+
+### Claude Code
+
+Install for your user account:
+
+```sh
+make install-claude
+```
+
+This installs to `~/.claude/skills/go-code-health/`. For a project-only
+installation instead:
+
+```sh
+make install-claude CLAUDE_SKILLS_DIR=/path/to/your/go-project/.claude/skills
+```
+
+In Claude Code chat, invoke the skill with `/go-code-health`:
+
+```text
+/go-code-health Check this Go project's health and policy status.
+```
+
+```text
+/go-code-health Assess internal/orders/service.go with full-project context.
+```
+
+```text
+/go-code-health Check the internal/orders package, excluding child packages.
+```
+
+```text
+/go-code-health Give me a verbose health report with up to 20 findings.
+```
+
+### Codex CLI or IDE extension
+
+Install for your user account:
+
+```sh
+make install-codex
+```
+
+This installs to `~/.agents/skills/go-code-health/`. For a project-only
+installation instead:
+
+```sh
+make install-codex CODEX_SKILLS_DIR=/path/to/your/go-project/.agents/skills
+```
+
+In Codex, use `/skills` to select the skill, or mention it with
+`$go-code-health`. The `$` examples below are **chat prompts**, not shell
+commands:
+
+```text
+$go-code-health Check this Go project's health and policy status.
+```
+
+```text
+$go-code-health Assess internal/orders/service.go with full-project context.
+```
+
+```text
+$go-code-health Check the internal/orders package, excluding child packages.
+```
+
+```text
+$go-code-health Give me a verbose health report with up to 20 findings.
+```
+
+### GitHub Copilot in VS Code
+
+Install into the project you want to analyze:
+
+```sh
+make install-github GITHUB_SKILLS_DIR=/path/to/your/go-project/.github/skills
+```
+
+This creates `.github/skills/go-code-health/` in that project. Open the
+project in VS Code, select **Agent** mode in Copilot Chat, and ask explicitly:
+
+```text
+Use the go-code-health skill to check this Go project's health and policy status.
+```
+
+```text
+Use the go-code-health skill to assess internal/orders/service.go with full-project context.
+```
+
+```text
+Use the go-code-health skill to check the internal/orders package, excluding child packages.
+```
+
+```text
+Use the go-code-health skill to give me a verbose health report with up to 20 findings.
+```
+
+For Copilot CLI, you can install the source skill for your user account:
+
+```sh
+make install-github GITHUB_SKILLS_DIR="$HOME/.copilot/skills"
+```
+
+Start Copilot CLI in the target Go project and use the same natural-language
+prompts. These prompts also work in Claude Code and Codex without their
+explicit skill prefixes.
+
+### What to expect
+
+- On the first run without `.go-code-health.json`, the agent measures a
+  baseline and asks you to choose the duplication engine and thresholds
+  before creating policy.
+- Later checks use `--check --format compact`. Passing checks return a short
+  summary; failures show every failed/unavailable check and up to 10 findings.
+  Analysis warnings remain visible.
+- A verbose request uses `--verbose`; a different findings limit uses
+  `--max-findings N`.
+- File/package requests use display filters while retaining complete-project
+  analysis and policy checks. A package view excludes child packages.
+- For authorized Go changes, checks run before and after the changes, with
+  normal tests separately. Unrelated existing violations are reported, not
+  automatically fixed.
+
+For focused implementation work, you can tell any of the agents:
+
+```text
+Use go-code-health to check my changes. Ask before fixing unrelated existing
+violations, and report test results separately from project-policy compliance.
+```
+
+See the official invocation guides for
+[Claude Code](https://code.claude.com/docs/en/skills),
+[Codex](https://developers.openai.com/codex/skills/), and
+[Copilot](https://code.visualstudio.com/docs/copilot/customization/agent-skills).
+
+---
+
 **Project**: go-code-health (parallel caching + hotspots summary)  
 **Status**: ✅ Production Ready
 

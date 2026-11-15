@@ -16,6 +16,9 @@ agent-enabled development environment.
 returns a deterministic, explainable 0–10 structural maintainability score at
 repository, package, and file levels.
 
+For installation and chat invocation examples, see the
+[Claude Code, Codex, and Copilot quick start](QUICK_START.md#use-with-claude-code-codex-and-copilot).
+
 ## Current Capabilities vs. Market Leaders
 
 <!-- markdownlint-disable MD013 MD060 -->
